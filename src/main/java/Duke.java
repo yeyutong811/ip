@@ -10,7 +10,7 @@ public class Duke {
                 + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println("Hello from\n" + logo);
         greet();
-        repeatCommand();
+        receiveCommand();
     }
 
     public static void greet(){
@@ -26,18 +26,40 @@ public class Duke {
         System.out.println("    ____________________________________________________________");
     }
 
-    public static void repeatCommand(){
+    public static void receiveCommand(){
         String line;
         Scanner in = new Scanner(System.in);
+        String[] commandStorage = new String[100];
+        int commandStorageIndex = 0;
+
         line = in.nextLine();
 
         while (line.equals("bye") == false) {
-            System.out.println("    ____________________________________________________________");
-            System.out.println("    " + line);
-            System.out.println("    ____________________________________________________________");
+            if (line.equals("list")){
+                listCommandHistory(commandStorage, commandStorageIndex);
+            }else {
+                commandStorage[commandStorageIndex] = line;
+                commandStorageIndex++;
+                repeatCommand(line);
+            }
             line = in.nextLine();
         }
 
         bye();
     }
+
+    public static void repeatCommand(String line){
+        System.out.println("    ____________________________________________________________");
+        System.out.println("    " + "added: " + line);
+        System.out.println("    ____________________________________________________________");
+    }
+
+    public static void listCommandHistory(String[] commandStorage, int commandStorageIndex){
+        System.out.println("    ____________________________________________________________");
+        for (int i=0; i< commandStorageIndex;i++){
+            System.out.format("    %d. %s\n", i+1, commandStorage[i]);
+        }
+        System.out.println("    ____________________________________________________________");
+    }
+
 }
