@@ -31,14 +31,21 @@ public class Duke {
         Scanner in = new Scanner(System.in);
         String[] commandStorage = new String[100];
         int commandStorageIndex = 0;
+        int taskIndex;
 
         line = in.nextLine();
 
         while (line.equals("bye") == false) {
             if (line.equals("list")){
                 listCommandHistory(commandStorage, commandStorageIndex);
-            }else {
-                commandStorage[commandStorageIndex] = line;
+            }else if (line.startsWith("done ")){
+                line = line.trim();
+                int startOfTaskIndex = line.indexOf(' ') + 1;
+                int commandLength = line.length();
+                taskIndex = Integer.parseInt(line.substring(startOfTaskIndex, commandLength)) - 1;
+                markTaskAsDone(commandStorage, taskIndex);
+            }else{
+                commandStorage[commandStorageIndex] = "[X] " + line;
                 commandStorageIndex++;
                 repeatCommand(line);
             }
@@ -60,6 +67,15 @@ public class Duke {
             System.out.format("    %d. %s\n", i+1, commandStorage[i]);
         }
         System.out.println("    ____________________________________________________________");
+    }
+
+    public static void markTaskAsDone(String[] commandStorage, int taskIndex){
+        commandStorage[taskIndex] = commandStorage[taskIndex].replace('X','V');
+        System.out.println("    ____________________________________________________________");
+        System.out.println("Nice! I've marked this task as done: ");
+        System.out.println("    " + commandStorage[taskIndex]);
+        System.out.println("    ____________________________________________________________");
+
     }
 
 }
