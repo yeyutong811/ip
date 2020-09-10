@@ -4,6 +4,10 @@ public class Duke {
 
     private static Task[] commandStorage = new Task[100];
 
+    private static final int lengthOfTypeDeadline = 8;
+    private static final int lengthOfTypeToDo = 4;
+    private static final int lengthOfTypeEvent = 5;
+
     public static void main(String[] args) {
         printGreet();
         receiveCommand();
@@ -47,6 +51,11 @@ public class Duke {
                 addDeadline(line);
             } else if (line.contains("event")) {
                 addEvent(line);
+            } else {
+                //CommandDoesNotExist
+                printSeparation();
+                System.out.println("    OOPS!!! I'm sorry, but I don't know what that means :-(");
+                printSeparation();
             }
         } while (line.equalsIgnoreCase("bye") == false);
     }
@@ -67,38 +76,50 @@ public class Duke {
     }
 
     public static void addToDo(String line) {
-        int endOfTypeIndex = 4;
-        String taskName = line.substring(endOfTypeIndex+1);
-        ToDo t = new ToDo(taskName);
-        addTaskToList(t);
+        try {
+            String taskName = line.substring(lengthOfTypeToDo + 1);
+            ToDo t = new ToDo(taskName);
+            addTaskToList(t);
+        } catch (StringIndexOutOfBoundsException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! The description of a todo cannot be empty.");
+            printSeparation();
+        }
     }
 
     public static void addDeadline(String line) {
-        int endOfTypeIndex = 8;
+        try {
+            int endOfTaskNameIndex = line.indexOf('/', lengthOfTypeDeadline) - 1;
+            String taskName = line.substring(lengthOfTypeDeadline+1, endOfTaskNameIndex);
 
-        int endOfTaskNameIndex = line.indexOf('/', endOfTypeIndex) - 1;
-        String taskName = line.substring(endOfTypeIndex+1, endOfTaskNameIndex);
+            int startOfTaskTimeIndex = line.indexOf("/by") + 4;
+            String taskTime = line.substring(startOfTaskTimeIndex);
 
-        int startOfTaskTimeIndex = line.indexOf("/by") + 4;
-        String taskTime = line.substring(startOfTaskTimeIndex);
-
-        Deadline d = new Deadline(taskName, taskTime);
-
-        addTaskToList(d);
+            Deadline d = new Deadline(taskName, taskTime);
+            addTaskToList(d);
+        } catch (StringIndexOutOfBoundsException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! Both the description and time of a deadline cannot be empty.");
+            printSeparation();
+        }
     }
 
     public static void addEvent(String line) {
-        int endOfTypeIndex = 5;
+        try {
+            int endOfTaskNameIndex = line.indexOf('/', lengthOfTypeEvent) - 1;
+            String taskName = line.substring(lengthOfTypeEvent+1, endOfTaskNameIndex);
 
-        int endOfTaskNameIndex = line.indexOf('/', endOfTypeIndex) - 1;
-        String taskName = line.substring(endOfTypeIndex+1, endOfTaskNameIndex);
+            int startOfTaskTimeIndex = line.indexOf("/at") + 4;
+            String taskTime = line.substring(startOfTaskTimeIndex);
 
-        int startOfTaskTimeIndex = line.indexOf("/at") + 4;
-        String taskTime = line.substring(startOfTaskTimeIndex);
+            Event e = new Event(taskName, taskTime);
 
-        Event e = new Event(taskName, taskTime);
-
-        addTaskToList(e);
+            addTaskToList(e);
+        } catch (StringIndexOutOfBoundsException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! Both the description and time of a event cannot be empty.");
+            printSeparation();
+        }
     }
 
     private static void printTaskDescription(Task t) {
@@ -119,6 +140,7 @@ public class Duke {
     public static void printList(Task[] commandStorage) {
         printSeparation();
         if (Task.numOfTasks==0) {
+            //EmptyListException
             System.out.println("    Dude, the list is empty! o_O");
         } else {
             System.out.println("    Here is the list of your tasks: ");
@@ -132,17 +154,26 @@ public class Duke {
     }
 
     public static void updateTaskStatus(Task[] commandStorage, String line) {
-        line = line.trim();
-        int startOfTaskIndex = line.indexOf(' ') + 1;
-        int taskIndex = Integer.parseInt(line.substring(startOfTaskIndex)) - 1;
-        commandStorage[taskIndex].markTaskAsDone();
+        try {
+            line = line.trim();
+            int startOfTaskIndex = line.indexOf(' ') + 1;
+            int taskIndex = Integer.parseInt(line.substring(startOfTaskIndex)) - 1;
+            commandStorage[taskIndex].markTaskAsDone();
 
-        printSeparation();
-        System.out.println("    Nice! I've marked this task as done: ");
-        System.out.format("    ");
-        printTaskDescription(commandStorage[taskIndex]);
-        printSeparation();
-
+            printSeparation();
+            System.out.println("    Nice! I've marked this task as done: ");
+            System.out.format("    ");
+            printTaskDescription(commandStorage[taskIndex]);
+            printSeparation();
+        } catch (NullPointerException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! The task does not exist.");
+            printSeparation();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! There is no such thing as task number 0.");
+            printSeparation();
+        }
     }
 
     private static void printSeparation() {
