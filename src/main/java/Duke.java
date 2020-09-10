@@ -60,19 +60,58 @@ public class Duke {
         } while (line.equalsIgnoreCase("bye") == false);
     }
 
-    public static void addTaskToList(Task t) {
-        commandStorage[Task.numOfTasks] = t;
-        Task.numOfTasks++;
-
+    public static void printList(Task[] commandStorage) {
         printSeparation();
-        System.out.println("    " + "Got it. I've added this task: ");
-
-        System.out.format("    ");
-        printTaskDescription(t);
-
-        System.out.format("    Now you have %d task%s in the list.%n", Task.numOfTasks,
-                (Task.numOfTasks == 1) ? "" : "s");
+        if (Task.numOfTasks==0) {
+            //EmptyListException
+            System.out.println("    Dude, the list is empty! o_O");
+        } else {
+            System.out.println("    Here is the list of your tasks: ");
+            for (int i = 0; i < Task.numOfTasks; i++) {
+                int index = i+1;
+                System.out.format("    %d.", index);
+                printTaskDescription(commandStorage[i]);
+            }
+        }
         printSeparation();
+    }
+
+    public static void updateTaskStatus(Task[] commandStorage, String line) {
+        try {
+            line = line.trim();
+            int startOfTaskIndex = line.indexOf(' ') + 1;
+            int taskIndex = Integer.parseInt(line.substring(startOfTaskIndex)) - 1;
+            commandStorage[taskIndex].markTaskAsDone();
+
+            printSeparation();
+            System.out.println("    Nice! I've marked this task as done: ");
+            System.out.format("    ");
+            printTaskDescription(commandStorage[taskIndex]);
+            printSeparation();
+        } catch (NullPointerException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! The task does not exist.");
+            printSeparation();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! There is no such thing as task number 0.");
+            printSeparation();
+        }
+    }
+
+    private static void printTaskDescription(Task t) {
+        System.out.format("[%s][%s] %s ", t.getTaskType(), t.getStatusIcon(), t.getTaskName());
+        switch (t.getTaskType()) {
+            case "T":
+                System.out.println("");
+                break;
+            case "D":
+                System.out.println("(by: " + t.getTaskTime() + ")");
+                break;
+            case "E":
+                System.out.println("(at: " + t.getTaskTime() + ")");
+                break;
+        }
     }
 
     public static void addToDo(String line) {
@@ -122,58 +161,19 @@ public class Duke {
         }
     }
 
-    private static void printTaskDescription(Task t) {
-        System.out.format("[%s][%s] %s ", t.getTaskType(), t.getStatusIcon(), t.getTaskName());
-        switch (t.getTaskType()) {
-        case "T":
-            System.out.println("");
-            break;
-        case "D":
-            System.out.println("(by: " + t.getTaskTime() + ")");
-            break;
-        case "E":
-            System.out.println("(at: " + t.getTaskTime() + ")");
-            break;
-        }
-    }
+    public static void addTaskToList(Task t) {
+        commandStorage[Task.numOfTasks] = t;
+        Task.numOfTasks++;
 
-    public static void printList(Task[] commandStorage) {
         printSeparation();
-        if (Task.numOfTasks==0) {
-            //EmptyListException
-            System.out.println("    Dude, the list is empty! o_O");
-        } else {
-            System.out.println("    Here is the list of your tasks: ");
-            for (int i = 0; i < Task.numOfTasks; i++) {
-                int index = i+1;
-                System.out.format("    %d.", index);
-                printTaskDescription(commandStorage[i]);
-            }
-        }
+        System.out.println("    " + "Got it. I've added this task: ");
+
+        System.out.format("    ");
+        printTaskDescription(t);
+
+        System.out.format("    Now you have %d task%s in the list.%n", Task.numOfTasks,
+                (Task.numOfTasks == 1) ? "" : "s");
         printSeparation();
-    }
-
-    public static void updateTaskStatus(Task[] commandStorage, String line) {
-        try {
-            line = line.trim();
-            int startOfTaskIndex = line.indexOf(' ') + 1;
-            int taskIndex = Integer.parseInt(line.substring(startOfTaskIndex)) - 1;
-            commandStorage[taskIndex].markTaskAsDone();
-
-            printSeparation();
-            System.out.println("    Nice! I've marked this task as done: ");
-            System.out.format("    ");
-            printTaskDescription(commandStorage[taskIndex]);
-            printSeparation();
-        } catch (NullPointerException e) {
-            printSeparation();
-            System.out.println("    OOPS!!! The task does not exist.");
-            printSeparation();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            printSeparation();
-            System.out.println("    OOPS!!! There is no such thing as task number 0.");
-            printSeparation();
-        }
     }
 
     private static void printSeparation() {
