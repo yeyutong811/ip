@@ -37,15 +37,15 @@ public class Duke {
             if (line.equalsIgnoreCase("bye")) {
                 printBye();
                 break;
-            }else if (line.equalsIgnoreCase("list")) {
+            } else if (line.equalsIgnoreCase("list")) {
                 printList(commandStorage);
-            }else if (line.contains("done")) {
+            } else if (line.contains("done")) {
                 updateTaskStatus(commandStorage, line);
-            }else if (line.contains("todo")) {
+            } else if (line.contains("todo")) {
                 addToDo(line);
-            }else if (line.contains("deadline")) {
+            } else if (line.contains("deadline")) {
                 addDeadline(line);
-            }else if (line.contains("event")) {
+            } else if (line.contains("event")) {
                 addEvent(line);
             }
         } while (line.equalsIgnoreCase("bye") == false);
@@ -102,17 +102,16 @@ public class Duke {
     }
 
     private static void printTaskDescription(Task t) {
+        System.out.format("[%s][%s] %s ", t.getTaskType(), t.getStatusIcon(), t.getTaskName());
         switch (t.getTaskType()) {
         case "T":
-            System.out.println("[" + t.getTaskType() + "][" + t.getStatusIcon() + "] " + t.getTaskName());
+            System.out.println("");
             break;
         case "D":
-            System.out.println("[" + t.getTaskType() + "][" + t.getStatusIcon() + "] " + t.getTaskName() + " (by: "
-                    + t.getTaskTime() + ")");
+            System.out.println("(by: " + t.getTaskTime() + ")");
             break;
         case "E":
-            System.out.println("[" + t.getTaskType() + "][" + t.getStatusIcon() + "] " + t.getTaskName() + " (at: "
-                    + t.getTaskTime() + ")");
+            System.out.println("(at: " + t.getTaskTime() + ")");
             break;
         }
     }
@@ -121,7 +120,7 @@ public class Duke {
         printSeparation();
         if (Task.numOfTasks==0) {
             System.out.println("    Dude, the list is empty! o_O");
-        }else {
+        } else {
             System.out.println("    Here is the list of your tasks: ");
             for (int i = 0; i < Task.numOfTasks; i++) {
                 int index = i+1;
