@@ -60,6 +60,8 @@ public class Duke {
                 addDeadline(line);
             } else if (line.contains("event")) {
                 addEvent(line);
+            } else if (line.contains("delete")) {
+                deleteTask(line);
             } else {
                 //CommandDoesNotExist
                 printSeparation();
@@ -187,7 +189,28 @@ public class Duke {
                 (Task.numOfTasks == 1) ? "" : "s");
         printSeparation();
     }
-    
+
+    public static void deleteTask(String line) {
+        try {
+            line = line.trim();
+            int startOfTaskIndex = line.indexOf(' ') + 1;
+            int taskIndex = Integer.parseInt(line.substring(startOfTaskIndex)) - 1;
+
+
+            printSeparation();
+            System.out.println("    Noted. I've removed this task: ");
+            System.out.format("    ");
+            printTaskDescription(tasks.get(taskIndex));
+            tasks.remove(taskIndex);
+            Task.numOfTasks--;
+            System.out.println("    Now you have " + Task.numOfTasks + " task" + (Task.numOfTasks>1?"s":"") + " in the list.");
+            printSeparation();
+        } catch (IndexOutOfBoundsException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! The task does not exist.");
+            printSeparation();
+        }
+    }
 
     private static void printSeparation() {
         System.out.println("    ____________________________________________________________");
