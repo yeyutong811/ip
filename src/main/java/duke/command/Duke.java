@@ -6,10 +6,12 @@ import duke.task.Task;
 import duke.task.ToDo;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Duke {
 
-    private static Task[] commandStorage = new Task[100];
+    //private static Task[] commandStorage = new Task[100];
+    private static ArrayList<Task> tasks = new ArrayList<>();
 
     private static final int lengthOfTypeDeadline = 8;
     private static final int lengthOfTypeToDo = 4;
@@ -49,9 +51,9 @@ public class Duke {
                 printBye();
                 break;
             } else if (line.equalsIgnoreCase("list")) {
-                printList(commandStorage);
+                printList(tasks);
             } else if (line.contains("done")) {
-                updateTaskStatus(commandStorage, line);
+                updateTaskStatus(tasks, line);
             } else if (line.contains("todo")) {
                 addToDo(line);
             } else if (line.contains("deadline")) {
@@ -67,7 +69,7 @@ public class Duke {
         } while (line.equalsIgnoreCase("bye") == false);
     }
 
-    public static void printList(Task[] commandStorage) {
+    public static void printList(ArrayList<Task> tasks) {
         printSeparation();
         if (Task.numOfTasks==0) {
             //EmptyListException
@@ -77,23 +79,23 @@ public class Duke {
             for (int i = 0; i < Task.numOfTasks; i++) {
                 int index = i+1;
                 System.out.format("    %d.", index);
-                printTaskDescription(commandStorage[i]);
+                printTaskDescription(tasks.get(i));
             }
         }
         printSeparation();
     }
 
-    public static void updateTaskStatus(Task[] commandStorage, String line) {
+    public static void updateTaskStatus(ArrayList<Task> tasks, String line) {
         try {
             line = line.trim();
             int startOfTaskIndex = line.indexOf(' ') + 1;
             int taskIndex = Integer.parseInt(line.substring(startOfTaskIndex)) - 1;
-            commandStorage[taskIndex].markTaskAsDone();
+            tasks.get(taskIndex).markTaskAsDone();
 
             printSeparation();
             System.out.println("    Nice! I've marked this task as done: ");
             System.out.format("    ");
-            printTaskDescription(commandStorage[taskIndex]);
+            printTaskDescription(tasks.get(taskIndex));
             printSeparation();
         } catch (NullPointerException e) {
             printSeparation();
@@ -169,7 +171,10 @@ public class Duke {
     }
 
     public static void addTaskToList(Task t) {
-        commandStorage[Task.numOfTasks] = t;
+        //commandStorage[Task.numOfTasks] = t;
+        //added
+        tasks.add(t);
+
         Task.numOfTasks++;
 
         printSeparation();
@@ -182,6 +187,7 @@ public class Duke {
                 (Task.numOfTasks == 1) ? "" : "s");
         printSeparation();
     }
+    
 
     private static void printSeparation() {
         System.out.println("    ____________________________________________________________");
