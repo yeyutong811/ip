@@ -1,11 +1,11 @@
 package duke.task;
 
-public class Task {
+public abstract class Task {
 
+    //public boolean isDone;
+    protected boolean isDone;
     protected String taskType;
     protected String taskName;
-    protected String taskTime;
-    protected boolean isDone;
     public static int numOfTasks = 0;
 
     public Task(String description) {
@@ -17,20 +17,13 @@ public class Task {
         return (isDone ? "V" : "X"); //return tick or cross
     }
 
-    public String getTaskType() {
-        return taskType;
-    }
-
-    public String getTaskName() {
-        return taskName;
-    }
-
-    public String getTaskTime() {
-        return taskTime;
-    }
-
     public void markTaskAsDone() {
         this.isDone = true;
     }
+    public abstract String getTaskType();
+
+    public abstract String toString();
+
+    public abstract void printTask();
 
 }

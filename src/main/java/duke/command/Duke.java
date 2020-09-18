@@ -5,11 +5,16 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.ToDo;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Duke {
-
-    private static Task[] commandStorage = new Task[100];
+    private static ArrayList<Task> tasks = new ArrayList<>();
+    public static final String FILE_PATH = ("D:\\CS2113T\\ip\\data\\data.txt");
 
     private static final int lengthOfTypeDeadline = 8;
     private static final int lengthOfTypeToDo = 4;
@@ -43,31 +48,39 @@ public class Duke {
         String line;
         Scanner in = new Scanner(System.in);
 
+        try {
+            createFile();
+        } catch (IllegalStateException e) {
+            System.out.println("    File error at receive command!");
+        }
+
         do {
             line = in.nextLine();
             if (line.equalsIgnoreCase("bye")) {
                 printBye();
                 break;
             } else if (line.equalsIgnoreCase("list")) {
-                printList(commandStorage);
+                printList(tasks);
             } else if (line.contains("done")) {
-                updateTaskStatus(commandStorage, line);
+                updateTaskStatus(tasks, line);
             } else if (line.contains("todo")) {
                 addToDo(line);
             } else if (line.contains("deadline")) {
                 addDeadline(line);
             } else if (line.contains("event")) {
                 addEvent(line);
+            } else if (line.contains("delete")) {
+                deleteTask(line);
             } else {
                 //CommandDoesNotExist
                 printSeparation();
                 System.out.println("    OOPS!!! I'm sorry, but I don't know what that means :-(");
                 printSeparation();
             }
-        } while (line.equalsIgnoreCase("bye") == false);
+        } while (!line.equalsIgnoreCase("bye"));
     }
 
-    public static void printList(Task[] commandStorage) {
+    public static void printList(ArrayList<Task> tasks) {
         printSeparation();
         if (Task.numOfTasks==0) {
             //EmptyListException
@@ -77,47 +90,33 @@ public class Duke {
             for (int i = 0; i < Task.numOfTasks; i++) {
                 int index = i+1;
                 System.out.format("    %d.", index);
-                printTaskDescription(commandStorage[i]);
+                tasks.get(i).printTask();
             }
         }
         printSeparation();
     }
 
-    public static void updateTaskStatus(Task[] commandStorage, String line) {
+    public static void updateTaskStatus(ArrayList<Task> tasks, String line) {
         try {
             line = line.trim();
             int startOfTaskIndex = line.indexOf(' ') + 1;
             int taskIndex = Integer.parseInt(line.substring(startOfTaskIndex)) - 1;
-            commandStorage[taskIndex].markTaskAsDone();
-
+            Task task = tasks.get(taskIndex);
+            task.markTaskAsDone();
+            writeToFile();
             printSeparation();
             System.out.println("    Nice! I've marked this task as done: ");
             System.out.format("    ");
-            printTaskDescription(commandStorage[taskIndex]);
-            printSeparation();
-        } catch (NullPointerException e) {
-            printSeparation();
-            System.out.println("    OOPS!!! The task does not exist.");
+            tasks.get(taskIndex).printTask();
             printSeparation();
         } catch (ArrayIndexOutOfBoundsException e) {
             printSeparation();
             System.out.println("    OOPS!!! There is no such thing as task number 0.");
             printSeparation();
-        }
-    }
-
-    private static void printTaskDescription(Task t) {
-        System.out.format("[%s][%s] %s ", t.getTaskType(), t.getStatusIcon(), t.getTaskName());
-        switch (t.getTaskType()) {
-            case "T":
-                System.out.println("");
-                break;
-            case "D":
-                System.out.println("(by: " + t.getTaskTime() + ")");
-                break;
-            case "E":
-                System.out.println("(at: " + t.getTaskTime() + ")");
-                break;
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! The task does not exist.");
+            printSeparation();
         }
     }
 
@@ -126,7 +125,7 @@ public class Duke {
             String taskName = line.substring(lengthOfTypeToDo + 1);
             ToDo t = new ToDo(taskName);
             addTaskToList(t);
-        } catch (StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException | IOException e) {
             printSeparation();
             System.out.println("    OOPS!!! The description of a todo cannot be empty.");
             printSeparation();
@@ -143,7 +142,7 @@ public class Duke {
 
             Deadline d = new Deadline(taskName, taskTime);
             addTaskToList(d);
-        } catch (StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException | IOException e) {
             printSeparation();
             System.out.println("    OOPS!!! Both the description and time of a deadline cannot be empty.");
             printSeparation();
@@ -161,30 +160,87 @@ public class Duke {
             Event e = new Event(taskName, taskTime);
 
             addTaskToList(e);
-        } catch (StringIndexOutOfBoundsException e) {
+        } catch (StringIndexOutOfBoundsException | IOException e) {
             printSeparation();
             System.out.println("    OOPS!!! Both the description and time of a event cannot be empty.");
             printSeparation();
         }
     }
 
-    public static void addTaskToList(Task t) {
-        commandStorage[Task.numOfTasks] = t;
+    public static void addTaskToList(Task t) throws IOException {
+        tasks.add(t);
+        appendToFile(t);
+
         Task.numOfTasks++;
 
         printSeparation();
         System.out.println("    " + "Got it. I've added this task: ");
 
         System.out.format("    ");
-        printTaskDescription(t);
+        t.printTask();;
 
         System.out.format("    Now you have %d task%s in the list.%n", Task.numOfTasks,
                 (Task.numOfTasks == 1) ? "" : "s");
         printSeparation();
     }
 
+    public static void deleteTask(String line) {
+        try {
+            line = line.trim();
+            int startOfTaskIndex = line.indexOf(' ') + 1;
+            int taskIndex = Integer.parseInt(line.substring(startOfTaskIndex)) - 1;
+
+
+            printSeparation();
+            System.out.println("    Noted. I'll removed this task: ");
+            System.out.format("    ");
+            tasks.get(taskIndex).printTask();;
+            tasks.remove(taskIndex);
+            writeToFile();
+            Task.numOfTasks--;
+            System.out.println("    Now you have " + Task.numOfTasks + " task" + (Task.numOfTasks>1?"s":"") + " in the list.");
+            printSeparation();
+        } catch (IndexOutOfBoundsException e) {
+            printSeparation();
+            System.out.println("    OOPS!!! The task does not exist.");
+            printSeparation();
+        }
+    }
+
     private static void printSeparation() {
         System.out.println("    ____________________________________________________________");
     }
 
+    public static void createFile() {
+        try {
+            File f = new File(FILE_PATH); // create a File for the given file path
+            if (!f.exists()) {
+                f.createNewFile();
+            } else {
+                System.out.println("    File already exists.");
+            }
+        } catch  (IOException e) {
+            System.out.println("Something went wrong when creating file: " + e.getMessage());
+        }
+    }
+
+    private static void writeToFile () {
+        try {
+            FileWriter fw = new FileWriter(FILE_PATH);
+            for (int i = 0; i<tasks.size(); i++) {
+                String fileInput = tasks.get(i).toString();
+                fw.write(System.lineSeparator() + fileInput);
+            }
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Something went wrong when writing to file: " + e.getMessage());
+        }
+    }
+
+    private static void appendToFile (Task t) throws IOException {
+        FileWriter fw = new FileWriter(FILE_PATH, true);
+        String fileInput = t.toString();
+        fw.write(System.lineSeparator() + fileInput);
+        fw.close();
+    }
 }
