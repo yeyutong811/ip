@@ -15,7 +15,12 @@ public class Deadline extends Task {
     }
 
     @Override
-    public String getTaskTime() {
-        return deadline;
+    public String toString() {
+        return getTaskType() + " | " + (this.isDone ? "1 | ": "0 | ") + this.taskName + " | " + this.deadline;
+    }
+
+    @Override
+    public void printTask() {
+        System.out.format("[%s][%s] %s (at: %s)%n", this.getTaskType(), this.getStatusIcon(), this.taskName, this.deadline);
     }
 }

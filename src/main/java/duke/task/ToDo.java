@@ -11,4 +11,14 @@ public class ToDo extends Task {
         return "T";
     }
 
+    @Override
+    public String toString() {
+        return getTaskType() + " | " + (this.isDone ? "1 | ": "0 | ") + this.taskName;
+    }
+
+    @Override
+    public void printTask() {
+        System.out.format("[%s][%s] %s%n", this.getTaskType(), this.getStatusIcon(), this.taskName);
+    }
+
 }

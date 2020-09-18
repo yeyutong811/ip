@@ -7,6 +7,7 @@ public class Event extends Task {
     public Event(String taskName, String taskTime) {
         super(taskName);
         time = taskTime;
+        this.taskType = "E";
     }
 
     @Override
@@ -15,8 +16,12 @@ public class Event extends Task {
     }
 
     @Override
-    public String getTaskTime() {
-        return time;
+    public String toString() {
+        return this.getTaskType() + " | " + (this.isDone ? "1 | ": "0 | ") + this.taskName + " | " + this.time;
     }
 
+    @Override
+    public void printTask() {
+        System.out.format("[%s][%s] %s (at: %s)%n", this.getTaskType(), this.getStatusIcon(), this.taskName, this.time);
+    }
 }
