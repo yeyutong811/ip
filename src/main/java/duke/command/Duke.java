@@ -5,10 +5,7 @@ import duke.task.Event;
 import duke.task.Task;
 import duke.task.ToDo;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -17,9 +14,14 @@ public class Duke {
     private static ArrayList<Task> tasks = new ArrayList<>();
     public static final String FILE_PATH = ("D:\\CS2113T\\ip\\data\\data.txt");
 
-    private static final int lengthOfTypeDeadline = 8;
-    private static final int lengthOfTypeToDo = 4;
-    private static final int lengthOfTypeEvent = 5;
+    private static final int LENGTH_OF_TYPE_DEADLINE = 8;
+    private static final int LENGTH_OF_TYPE_TO_DO = 4;
+    private static final int LENGTH_OF_TYPE_EVENT = 5;
+
+    private static final int DATA_TASK_TYPE_INDEX = 0;
+    private static final int DATA_TASK_STATUS_INDEX = 1;
+    private static final int DATA_TASK_NAME_INDEX = 2;
+    private static final int DATA_TASK_TIME_INDEX = 3;
 
     public static void main(String[] args) {
         printGreet();
@@ -123,7 +125,7 @@ public class Duke {
 
     public static void addToDo(String line) {
         try {
-            String taskName = line.substring(lengthOfTypeToDo + 1);
+            String taskName = line.substring(LENGTH_OF_TYPE_TO_DO + 1);
             ToDo t = new ToDo(taskName);
             addTaskToList(t);
         } catch (StringIndexOutOfBoundsException | IOException e) {
@@ -135,8 +137,8 @@ public class Duke {
 
     public static void addDeadline(String line) {
         try {
-            int endOfTaskNameIndex = line.indexOf('/', lengthOfTypeDeadline) - 1;
-            String taskName = line.substring(lengthOfTypeDeadline+1, endOfTaskNameIndex);
+            int endOfTaskNameIndex = line.indexOf('/', LENGTH_OF_TYPE_DEADLINE) - 1;
+            String taskName = line.substring(LENGTH_OF_TYPE_DEADLINE +1, endOfTaskNameIndex);
 
             int startOfTaskTimeIndex = line.indexOf("/by") + 4;
             String taskTime = line.substring(startOfTaskTimeIndex);
@@ -152,8 +154,8 @@ public class Duke {
 
     public static void addEvent(String line) {
         try {
-            int endOfTaskNameIndex = line.indexOf('/', lengthOfTypeEvent) - 1;
-            String taskName = line.substring(lengthOfTypeEvent+1, endOfTaskNameIndex);
+            int endOfTaskNameIndex = line.indexOf('/', LENGTH_OF_TYPE_EVENT) - 1;
+            String taskName = line.substring(LENGTH_OF_TYPE_EVENT +1, endOfTaskNameIndex);
 
             int startOfTaskTimeIndex = line.indexOf("/at") + 4;
             String taskTime = line.substring(startOfTaskTimeIndex);
@@ -163,7 +165,7 @@ public class Duke {
             addTaskToList(e);
         } catch (StringIndexOutOfBoundsException | IOException e) {
             printSeparation();
-            System.out.println("    OOPS!!! Both the description and time of a event cannot be empty.");
+            System.out.println("    OOPS!!! Both the description and time of an event cannot be empty.");
             printSeparation();
         }
     }
@@ -201,6 +203,7 @@ public class Duke {
             writeToFile();
 
             Task.numOfTasks--;
+            System.out.println("    Task removed successfully!");
             System.out.println("    Now you have " + Task.numOfTasks + " task" + (Task.numOfTasks>1?"s":"") + " in the list.");
             printSeparation();
         } catch (IndexOutOfBoundsException e) {
@@ -221,25 +224,8 @@ public class Duke {
             if (!f.exists()) {
                 f.createNewFile();
             } else {
+                readFile();
                 System.out.println("    File already exists.");
-            }
-
-            Scanner s = new Scanner(f);
-            while (s.hasNext()) {
-                String[] taskLine = s.nextLine().split(" \\| ");
-                switch (taskLine[0]) {
-                case "T":
-                    addToDo("todo " + taskLine[2]);
-                    break;
-                case "D":
-                    addDeadline("deadline " + taskLine[2] + " /by " + taskLine[3]);
-                    break;
-                case "E":
-                    addEvent("event " + taskLine[2] + " /at " + taskLine[3]);
-                    break;
-                default:
-                }
-                s.close();
             }
         } catch (IOException e) {
             System.out.println("Something went wrong when creating file: " + e.getMessage());
@@ -265,4 +251,107 @@ public class Duke {
         fw.write(System.lineSeparator() + fileInput);
         fw.close();
     }
+
+    private static void readFile() {
+        ArrayList<String> dataList = new ArrayList<>();
+
+        try {
+            String line;
+            BufferedReader br = new BufferedReader(new FileReader(FILE_PATH));
+            while ((line = br.readLine()) != null) {
+                dataList.add(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Something went wrong when reading file.");
+        } finally {
+            decodeTaskData(dataList);
+        }
+    }
+
+    /**
+     * This function decodes the data in data.txt according to Task types
+     * @param dataList
+     */
+
+    private static void decodeTaskData(ArrayList<String> dataList) {
+        for (int i=1; i< dataList.size(); i++) {
+            char taskType = dataList.get(i).charAt(0);
+            ArrayList<String> taskArgs = new ArrayList<>();
+            String[] taskArgsArray = dataList.get(i).split("[|]");
+
+            for (String arg: taskArgsArray) {
+                taskArgs.add(arg.trim());
+            }
+
+            switch (taskType) {
+                case ('T'):
+                    Task toDo = createToDoTask(taskArgs);
+                    tasks.add(toDo);
+                    Task.numOfTasks++;
+                    break;
+                case ('D'):
+                    Task deadline = createDeadlineTask(taskArgs);
+                    tasks.add(deadline);
+                    Task.numOfTasks++;
+                    break;
+                case ('E'):
+                    Task event = createEventTask(taskArgs);
+                    tasks.add(event);
+                    Task.numOfTasks++;
+                    break;
+                default:
+                    System.out.println("None of the Task types.");
+            }
+        }
+    }
+
+    /**
+     * The following 3 functions create task from reading the file data.txt
+     * @param todoArgs or deadlineArgs or eventArgs
+     * @return todo or deadline or event
+     */
+    private static Task createToDoTask(ArrayList<String> todoArgs) {
+        String taskStatus = todoArgs.get(DATA_TASK_STATUS_INDEX);
+        String taskName = todoArgs.get(DATA_TASK_NAME_INDEX);
+
+        Task todo;
+        if (taskStatus.equals("1")) {
+            todo = new ToDo(taskName);
+            todo.markTaskAsDone();
+        } else {
+            todo = new ToDo(taskName);
+        }
+        return todo;
+    }
+
+    private static Task createDeadlineTask(ArrayList<String> deadlineArgs) {
+        String taskStatus = deadlineArgs.get(DATA_TASK_STATUS_INDEX);
+        String taskName = deadlineArgs.get(DATA_TASK_NAME_INDEX);
+        String taskTime = deadlineArgs.get(DATA_TASK_TIME_INDEX);
+
+        Task deadline;
+        if (taskStatus.equals("1")) {
+            deadline = new Deadline(taskName, taskTime);
+            deadline.markTaskAsDone();
+        } else {
+            deadline = new Deadline(taskName, taskTime);
+        }
+        return deadline;
+    }
+
+    private static Task createEventTask(ArrayList<String> deadlineArgs) {
+        String taskStatus = deadlineArgs.get(DATA_TASK_STATUS_INDEX);
+        String taskName = deadlineArgs.get(DATA_TASK_NAME_INDEX);
+        String taskTime = deadlineArgs.get(DATA_TASK_TIME_INDEX);
+
+        Task event;
+        if (taskStatus.equals("1")) {
+            event = new Event(taskName, taskTime);
+            event.markTaskAsDone();
+        } else {
+            event = new Event(taskName, taskTime);
+        }
+        return event;
+    }
+
 }
