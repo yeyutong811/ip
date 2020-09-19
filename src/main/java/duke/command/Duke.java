@@ -217,12 +217,31 @@ public class Duke {
     public static void createFile() {
         try {
             File f = new File(FILE_PATH); // create a File for the given file path
+
             if (!f.exists()) {
                 f.createNewFile();
             } else {
                 System.out.println("    File already exists.");
             }
-        } catch  (IOException e) {
+
+            Scanner s = new Scanner(f);
+            while (s.hasNext()) {
+                String[] taskLine = s.nextLine().split(" \\| ");
+                switch (taskLine[0]) {
+                case "T":
+                    addToDo("todo " + taskLine[2]);
+                    break;
+                case "D":
+                    addDeadline("deadline " + taskLine[2] + " /by " + taskLine[3]);
+                    break;
+                case "E":
+                    addEvent("event " + taskLine[2] + " /at " + taskLine[3]);
+                    break;
+                default:
+                }
+                s.close();
+            }
+        } catch (IOException e) {
             System.out.println("Something went wrong when creating file: " + e.getMessage());
         }
     }
@@ -230,8 +249,8 @@ public class Duke {
     private static void writeToFile () {
         try {
             FileWriter fw = new FileWriter(FILE_PATH);
-            for (Task task : tasks) {
-                String fileInput = task.toString();
+            for (int i = 0; i<tasks.size(); i++) {
+                String fileInput = tasks.get(i).toString();
                 fw.write(System.lineSeparator() + fileInput);
             }
             fw.close();
