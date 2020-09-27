@@ -10,35 +10,48 @@ import java.util.Scanner;
 public class Parser {
 
     public static void receiveCommand() {
-        String line;
+        String input;
         Scanner in = new Scanner(System.in);
         Task.numOfTasks = 0;
         Storage.load();
 
         do {
-            line = in.nextLine();
-            if (line.equalsIgnoreCase("bye")) {
+            input = in.nextLine();
+            String[] keywords = input.split(" ",2);
+
+            switch(keywords[0].toLowerCase()) {
+            case "bye":
                 Ui.printBye();
                 break;
-            } else if (line.equalsIgnoreCase("list")) {
+            case "list":
                 Ui.printList(TaskList.tasks);
-            } else if (line.contains("done")) {
-                TaskList.updateTaskStatus(TaskList.tasks, line);
-            } else if (line.contains("todo")) {
-                TaskList.addToDo(line);
-            } else if (line.contains("deadline")) {
-                TaskList.addDeadline(line);
-            } else if (line.contains("event")) {
-                TaskList.addEvent(line);
-            } else if (line.contains("delete")) {
-                TaskList.deleteTask(line);
-            } else {
+                break;
+            case "done":
+                TaskList.updateTaskStatus(TaskList.tasks, input);
+                break;
+            case "todo":
+                TaskList.addToDo(input);
+                break;
+            case "deadline":
+                TaskList.addDeadline(input);
+                break;
+            case "event":
+                TaskList.addEvent(input);
+                break;
+            case "delete":
+                TaskList.deleteTask(input);
+                break;
+            case "find":
+                TaskList.findList(input);
+                break;
+            default:
                 //CommandDoesNotExist
                 Ui.printSeparation();
-                System.out.println("    OOPS!!! I'm sorry, but I don't know what that means :-(");
+                Ui.printCommandNotExistMessage();
                 Ui.printSeparation();
             }
-        } while (!line.equalsIgnoreCase("bye"));
+
+        } while (!input.equalsIgnoreCase("bye"));
     }
 
 }
