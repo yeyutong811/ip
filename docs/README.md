@@ -4,10 +4,10 @@ Duke is a task scheduler that allows you to manage 3 types of tasks: todos, dead
 
 ## Quick Start
 1. Ensure you have Java 11 or above installed on your computer.  
-2. Download the latest `.jar` file.  
+2. Download the latest `ip.jar` file.  
 3. Copy the file to your desired home folder.  
 4. In command prompt, use `cd` to navigate to the home folder.  
-5. Run the `.jar` file in command prompt by entering `java -jar duke.jar` 
+5. Run the `.jar` file in command prompt by entering `java -jar ip.jar` 
 6. Enter `help` to view available user commands.
 7. Refer to the guide below for details of each command. 
 
