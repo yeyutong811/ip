@@ -8,8 +8,6 @@ public class InvalidCommand extends Command {
      * Prints invalid input messages.
      */
     public InvalidCommand() {
-        Ui.printSeparation();
         Ui.printCommandNotExistMessage();
-        Ui.printSeparation();
     }
 }

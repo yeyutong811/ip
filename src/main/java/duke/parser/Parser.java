@@ -22,6 +22,7 @@ public class Parser {
     public static final String TASK_TYPE_EVENT_COMMAND = "event";
     public static final String DELETE_COMMAND = "delete";
     public static final String FIND_COMMAND = "find";
+    public static final String HELP_COMMAND = "help";
     private static final int DATA_TASK_TYPE_INDEX = 0;
 
     /**
@@ -65,8 +66,12 @@ public class Parser {
             case FIND_COMMAND:
                 new FindCommand(input);
                 break;
+            case HELP_COMMAND:
+                new HelpCommand();
+                break;
             default:
                 new InvalidCommand();
+                break;
             }
 
         } while (!input.equalsIgnoreCase(EXIT_COMMAND));

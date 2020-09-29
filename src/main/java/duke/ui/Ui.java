@@ -63,6 +63,7 @@ public class Ui {
      * Prints the messages to show that task is successfully added.
      */
     public static void printTaskAddedMessage(Task t) {
+        printSeparation();
         System.out.println("    " + "Got it. I've added this task: ");
 
         System.out.format("    ");
@@ -71,20 +72,25 @@ public class Ui {
 
         System.out.format("    Now you have %d task%s in the list.%n", Task.numOfTasks,
                 (Task.numOfTasks == 1) ? "" : "s");
+        printSeparation();
     }
 
     /**
      * Prints the messages to show that the task the user referred to is invalid.
      */
     public static void printTaskNotExistMessage() {
+        printSeparation();
         System.out.println("    OOPS!!! The task does not exist.");
+        printSeparation();
     }
 
     /**
      * Prints the messages to show that the user missed out task descriptions when adding the task.
      */
     public static void printMissingTaskDescriptionMessage(String s) {
+        printSeparation();
         System.out.println("    OOPS!!! The description of a" + s + " cannot be empty.");
+        printSeparation();
     }
 
     /**
@@ -113,23 +119,46 @@ public class Ui {
      * Prints the messages to show that the command the user entered is invalid.
      */
     public static void printCommandNotExistMessage() {
+        printSeparation();
         System.out.println("    OOPS!!! I'm sorry, but I don't know what that means :-(");
+        printSeparation();
     }
 
+    /**
+     * Prints the list of tasks with given keyword.
+     */
     public static void printFindList(ArrayList<Task> foundTasks) {
         printSeparation();
         if (foundTasks.isEmpty()) {
-            System.out.println("No task found in the list with the given keyword!");
+            System.out.println("    No task found in the list with the given keyword!");
             printSeparation();
             return;
         }
 
-        System.out.println("Here are the matching tasks in your list:");
+        System.out.println("    Here are the matching tasks in your list:");
         for (int i = 0; i < foundTasks.size(); i++) {
             int index = i+1;
             System.out.format("    %d.", index);
             foundTasks.get(i).printTask();
         }
+        printSeparation();
+    }
+
+    /**
+     * Prints the list of available user commands.
+     */
+    public static void printHelpMessage() {
+        printSeparation();
+        System.out.println("    Here's the list of available commands:");
+        System.out.println("    1.help - View list of available user commands\n" +
+                "    2.list - View list of tasks\n" +
+                "    3.todo - Add todo\n" +
+                "    4.deadline - Add deadline\n" +
+                "    5.event - Add event\n" +
+                "    6.delete - Delete task\n" +
+                "    7.done - Mark the task as done\n" +
+                "    8.find - Find tasks using keyword\n" +
+                "    9.bye - Exit program");
         printSeparation();
     }
 }

@@ -38,6 +38,6 @@ public class Deadline extends Task {
      * */
     @Override
     public void printTask() {
-        System.out.format("[%s][%s] %s (at: %s)%n", this.getTaskType(), this.getStatusIcon(), this.taskName, this.deadline);
+        System.out.format("[%s][%s] %s (by: %s)%n", this.getTaskType(), this.getStatusIcon(), this.taskName, this.deadline);
     }
 }

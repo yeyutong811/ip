@@ -50,9 +50,7 @@ public class TaskList {
             tasks.get(taskIndex).printTask();
             Ui.printSeparation();
         } catch (NullPointerException | IndexOutOfBoundsException e) {
-            Ui.printSeparation();
             Ui.printTaskNotExistMessage();
-            Ui.printSeparation();
         }
     }
 
@@ -67,9 +65,7 @@ public class TaskList {
             ToDo t = new ToDo(taskName);
             addTaskToList(t);
         } catch (StringIndexOutOfBoundsException | IOException e) {
-            Ui.printSeparation();
             Ui.printMissingTaskDescriptionMessage(" todo");
-            Ui.printSeparation();
         }
     }
 
@@ -89,9 +85,7 @@ public class TaskList {
             Deadline d = new Deadline(taskName, taskTime);
             addTaskToList(d);
         } catch (StringIndexOutOfBoundsException | IOException e) {
-            Ui.printSeparation();
             Ui.printMissingTaskDescriptionMessage(" deadline");
-            Ui.printSeparation();
         }
     }
 
@@ -112,9 +106,7 @@ public class TaskList {
 
             addTaskToList(e);
         } catch (StringIndexOutOfBoundsException | IOException e) {
-            Ui.printSeparation();
             Ui.printMissingTaskDescriptionMessage("n event");
-            Ui.printSeparation();
         }
     }
 
@@ -127,12 +119,8 @@ public class TaskList {
     public static void addTaskToList(Task t) throws IOException {
         tasks.add(t);
         Storage.appendToFile(t);
-
         Task.numOfTasks++;
-
-        Ui.printSeparation();
         Ui.printTaskAddedMessage(t);
-        Ui.printSeparation();
     }
 
     /**
@@ -160,9 +148,7 @@ public class TaskList {
             Ui.printSeparation();
         } catch (IndexOutOfBoundsException e) {
             System.out.println("");
-            Ui.printSeparation();
             Ui.printTaskNotExistMessage();
-            Ui.printSeparation();
         }
     }
 
