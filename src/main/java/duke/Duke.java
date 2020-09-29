@@ -37,7 +37,8 @@ public class Duke {
      * Runs Duke.
      */
     public static void main(String[] args) {
-        new Duke("D:\\CS2113T\\ip\\data\\data.txt").run();
+
+        new Duke("data.txt").run();
     }
 
 }
