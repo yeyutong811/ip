@@ -22,6 +22,10 @@ public abstract class Task {
     }
     public abstract String getTaskType();
 
+    public String getTaskName() {
+        return taskName;
+    }
+
     public abstract String toString();
 
     public abstract void printTask();
