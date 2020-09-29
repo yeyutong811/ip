@@ -6,6 +6,9 @@ import duke.tasklist.TaskList;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Represents storage data.
+ */
 public class Storage {
     public static String filePath;
 
@@ -14,6 +17,10 @@ public class Storage {
         load();
     }
 
+    /**
+     * If the file "data.txt" exists, reads the file.
+     * If the file "data.txt" does not exist, creates the file.
+     */
     public static void createFile() {
         try {
             File f = new File(filePath); // create a File for the given file path
@@ -29,6 +36,9 @@ public class Storage {
         }
     }
 
+    /**
+     * Writes data into the file "data.txt".
+     */
     public static void writeToFile () {
         try {
             FileWriter fw = new FileWriter(filePath);
@@ -42,6 +52,9 @@ public class Storage {
         }
     }
 
+    /**
+     * Appends data into the end of the file "data.txt".
+     */
     public static void appendToFile (Task t) throws IOException {
         FileWriter fw = new FileWriter(filePath, true);
         String fileInput = t.toString();
@@ -49,6 +62,9 @@ public class Storage {
         fw.close();
     }
 
+    /**
+     * Reads data from the file "data.txt".
+     */
     private static void readFile() {
         ArrayList<String> dataList = new ArrayList<>();
 
@@ -66,8 +82,8 @@ public class Storage {
     }
 
     /**
-     * This function decodes the data in data.txt according to Task types
-     * @param dataList
+     * Decodes the data in data.txt according to Task types.
+     * @param dataList ArrayList of the data string in the file "data.txt".
      */
 
     private static void decodeTaskData(ArrayList<String> dataList) {
@@ -102,6 +118,9 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads the file "data.txt".
+     */
     public static void load() {
         try {
             createFile();
