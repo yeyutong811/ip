@@ -1,44 +1,64 @@
 package duke.parser;
 
+import duke.command.*;
+
 import duke.storage.Storage;
 import duke.task.Task;
 import duke.tasklist.TaskList;
-import duke.ui.Ui;
 
 import java.util.Scanner;
 
 public class Parser {
 
+    public static final String EXIT_COMMAND = "bye";
+    public static final String LIST_COMMAND = "list";
+    public static final String DONE_COMMAND = "done";
+    public static final String TASK_TYPE_TODO_COMMAND = "todo";
+    public static final String TASK_TYPE_DEADLINE_COMMAND = "deadline";
+    public static final String TASK_TYPE_EVENT_COMMAND = "event";
+    public static final String DELETE_COMMAND = "delete";
+    public static final String FIND_COMMAND = "find";
+
     public static void receiveCommand() {
-        String line;
+        String input;
         Scanner in = new Scanner(System.in);
         Task.numOfTasks = 0;
         Storage.load();
 
         do {
-            line = in.nextLine();
-            if (line.equalsIgnoreCase("bye")) {
-                Ui.printBye();
-                break;
-            } else if (line.equalsIgnoreCase("list")) {
-                Ui.printList(TaskList.tasks);
-            } else if (line.contains("done")) {
-                TaskList.updateTaskStatus(TaskList.tasks, line);
-            } else if (line.contains("todo")) {
-                TaskList.addToDo(line);
-            } else if (line.contains("deadline")) {
-                TaskList.addDeadline(line);
-            } else if (line.contains("event")) {
-                TaskList.addEvent(line);
-            } else if (line.contains("delete")) {
-                TaskList.deleteTask(line);
-            } else {
-                //CommandDoesNotExist
-                Ui.printSeparation();
-                System.out.println("    OOPS!!! I'm sorry, but I don't know what that means :-(");
-                Ui.printSeparation();
+            input = in.nextLine();
+            String[] keywords = input.split(" ",2); //separate command word from other information
+
+            switch(keywords[0].toLowerCase()) {
+                case EXIT_COMMAND:
+                    new ExitCommand();
+                    break;
+                case LIST_COMMAND:
+                    new ListCommand(TaskList.tasks);
+                    break;
+                case DONE_COMMAND:
+                    new CompleteTaskCommand(TaskList.tasks, input);
+                    break;
+                case TASK_TYPE_TODO_COMMAND:
+                    new AddToDoCommand(input);
+                    break;
+                case TASK_TYPE_DEADLINE_COMMAND:
+                    new AddDeadlineCommand(input);
+                    break;
+                case TASK_TYPE_EVENT_COMMAND:
+                    new AddEventCommand(input);
+                    break;
+                case DELETE_COMMAND:
+                    new DeleteCommand(input);
+                    break;
+                case FIND_COMMAND:
+                    new FindCommand(input);
+                    break;
+                default:
+                    new InvalidCommand();
             }
-        } while (!line.equalsIgnoreCase("bye"));
+
+        } while (!input.equalsIgnoreCase(EXIT_COMMAND));
     }
 
 }
