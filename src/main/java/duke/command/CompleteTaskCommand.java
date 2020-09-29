@@ -6,6 +6,7 @@ import duke.tasklist.TaskList;
 import java.util.ArrayList;
 
 public class CompleteTaskCommand extends Command {
+
     /**
      * Updates the task status as completed.
      *

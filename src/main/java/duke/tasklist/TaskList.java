@@ -9,6 +9,7 @@ import duke.ui.Ui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Represents the list of existing tasks.
@@ -163,6 +164,18 @@ public class TaskList {
             Ui.printTaskNotExistMessage();
             Ui.printSeparation();
         }
+    }
+
+    public static void findList(String command) {
+        String keyword = command.substring(5);
+        ArrayList<Task> foundTasks = find(keyword);
+        Ui.printFindList(foundTasks);
+    }
+
+    public static ArrayList<Task> find(String keyword) {
+        return (ArrayList<Task>) tasks.stream()
+                .filter(t -> t.getTaskName().toLowerCase().contains(keyword))
+                .collect(Collectors.toList());
     }
 
     /**

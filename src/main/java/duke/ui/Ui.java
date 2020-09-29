@@ -115,4 +115,21 @@ public class Ui {
     public static void printCommandNotExistMessage() {
         System.out.println("    OOPS!!! I'm sorry, but I don't know what that means :-(");
     }
+
+    public static void printFindList(ArrayList<Task> foundTasks) {
+        printSeparation();
+        if (foundTasks.isEmpty()) {
+            System.out.println("No task found in the list with the given keyword!");
+            printSeparation();
+            return;
+        }
+
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < foundTasks.size(); i++) {
+            int index = i+1;
+            System.out.format("    %d.", index);
+            foundTasks.get(i).printTask();
+        }
+        printSeparation();
+    }
 }

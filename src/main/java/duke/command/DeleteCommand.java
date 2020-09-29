@@ -3,6 +3,7 @@ package duke.command;
 import duke.tasklist.TaskList;
 
 public class DeleteCommand extends Command {
+
     /**
      * Deletes the task.
      *
