@@ -1,5 +1,6 @@
 package duke.command;
 
+import duke.exception.DukeException;
 import duke.tasklist.TaskList;
 
 public class AddDeadlineCommand extends Command {
@@ -10,6 +11,10 @@ public class AddDeadlineCommand extends Command {
      * @param line input by user
      */
     public AddDeadlineCommand(String line) {
-        TaskList.addDeadline(line);
+        try {
+            TaskList.addDeadline(line);
+        } catch(DukeException e) {
+
+        }
     }
 }

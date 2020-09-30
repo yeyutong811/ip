@@ -85,18 +85,10 @@ public class Ui {
     }
 
     /**
-     * Prints the messages to show that the user missed out task descriptions when adding the task.
-     */
-    public static void printMissingTaskDescriptionMessage(String s) {
-        printSeparation();
-        System.out.println("    OOPS!!! The description of a" + s + " cannot be empty.");
-        printSeparation();
-    }
-
-    /**
      * Prints the messages to show that the task is marked as done successfully.
      */
     public static void printMarkTaskDoneMessage() {
+
         System.out.println("    Nice! I've marked this task as done: ");
     }
 
@@ -113,15 +105,6 @@ public class Ui {
      */
     public static void printRemovingTaskMessage() {
         System.out.println("    Noted. I'll removed this task: ");
-    }
-
-    /**
-     * Prints the messages to show that the command the user entered is invalid.
-     */
-    public static void printCommandNotExistMessage() {
-        printSeparation();
-        System.out.println("    OOPS!!! I'm sorry, but I don't know what that means :-(");
-        printSeparation();
     }
 
     /**

@@ -1,5 +1,6 @@
 package duke;
 
+import duke.exception.DukeException;
 import duke.parser.Parser;
 import duke.storage.Storage;
 import duke.tasklist.TaskList;
@@ -28,7 +29,7 @@ public class Duke {
     /**
      * Runs the program.
      */
-    public void run() {
+    public void run() throws DukeException {
         Ui.printGreet();
         Parser.receiveCommand();
     }
@@ -36,7 +37,7 @@ public class Duke {
     /**
      * Runs Duke.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DukeException {
 
         new Duke("data.txt").run();
     }

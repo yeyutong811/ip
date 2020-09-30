@@ -1,5 +1,9 @@
 package duke.task;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 /**
  * Represents a Event Task. A <code>Event</code> object corresponds to
  * 3 string variables e.g., <code>D, read book, 9am</code>
@@ -30,6 +34,7 @@ public class Deadline extends Task {
      * */
     @Override
     public String toString() {
+
         return getTaskType() + " | " + (this.isDone ? "1 | ": "0 | ") + this.taskName + " | " + this.deadline;
     }
 

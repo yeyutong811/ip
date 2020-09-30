@@ -1,5 +1,6 @@
 package duke.command;
 
+import duke.exception.DukeException;
 import duke.tasklist.TaskList;
 
 public class AddToDoCommand extends Command {
@@ -10,6 +11,10 @@ public class AddToDoCommand extends Command {
      * @param line input by user
      */
     public AddToDoCommand(String line) {
-        TaskList.addToDo(line);
+        try {
+            TaskList.addToDo(line);
+        } catch (DukeException e) {
+
+        }
     }
 }

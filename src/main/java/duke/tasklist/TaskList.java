@@ -1,5 +1,6 @@
 package duke.tasklist;
 
+import duke.exception.DukeException;
 import duke.storage.Storage;
 import duke.task.Deadline;
 import duke.task.Event;
@@ -59,14 +60,19 @@ public class TaskList {
      *
      * @param line user input.
      */
-    public static void addToDo(String line) {
+    public static void addToDo(String line) throws DukeException {
         try {
             String taskName = line.substring(LENGTH_OF_TYPE_TO_DO + 1);
             ToDo t = new ToDo(taskName);
             addTaskToList(t);
         } catch (StringIndexOutOfBoundsException | IOException e) {
-            Ui.printMissingTaskDescriptionMessage(" todo");
+            throwException("todo");
+            //Ui.printMissingTaskDescriptionMessage(" todo");
         }
+    }
+
+    public static void throwException(String command) throws DukeException {
+        throw new DukeException(command);
     }
 
     /**
@@ -74,7 +80,7 @@ public class TaskList {
      *
      * @param line user input.
      */
-    public static void addDeadline(String line) {
+    public static void addDeadline(String line) throws DukeException {
         try {
             int endOfTaskNameIndex = line.indexOf('/', LENGTH_OF_TYPE_DEADLINE) - 1;
             String taskName = line.substring(LENGTH_OF_TYPE_DEADLINE +1, endOfTaskNameIndex);
@@ -83,9 +89,11 @@ public class TaskList {
             String taskTime = line.substring(startOfTaskTimeIndex);
 
             Deadline d = new Deadline(taskName, taskTime);
+
             addTaskToList(d);
         } catch (StringIndexOutOfBoundsException | IOException e) {
-            Ui.printMissingTaskDescriptionMessage(" deadline");
+            throwException("deadline");
+            //Ui.printMissingTaskDescriptionMessage(" deadline");
         }
     }
 
@@ -94,7 +102,7 @@ public class TaskList {
      *
      * @param line user input.
      */
-    public static void addEvent(String line) {
+    public static void addEvent(String line) throws DukeException {
         try {
             int endOfTaskNameIndex = line.indexOf('/', LENGTH_OF_TYPE_EVENT) - 1;
             String taskName = line.substring(LENGTH_OF_TYPE_EVENT +1, endOfTaskNameIndex);
@@ -106,7 +114,8 @@ public class TaskList {
 
             addTaskToList(e);
         } catch (StringIndexOutOfBoundsException | IOException e) {
-            Ui.printMissingTaskDescriptionMessage("n event");
+            throwException("event");
+            //Ui.printMissingTaskDescriptionMessage("n event");
         }
     }
 
