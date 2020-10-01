@@ -9,6 +9,8 @@ import duke.tasklist.TaskList;
 
 import java.util.Scanner;
 
+import static duke.tasklist.TaskList.throwException;
+
 /**
  * Represents a parser that parses input commands by the user.
  * A <code>parser</code> object does not have any values itself.
@@ -32,7 +34,7 @@ public class Parser {
      *
      * @return not applicable.
      */
-    public static void receiveCommand() {
+    public static void receiveCommand() throws DukeException {
         String input;
         Scanner in = new Scanner(System.in);
         Task.numOfTasks = 0;
@@ -56,10 +58,10 @@ public class Parser {
                         new AddToDoCommand(input);
                         break;
                     case TASK_TYPE_DEADLINE_COMMAND:
-                        new AddDeadlineCommand(input);
+                        new AddDeadlineCommand(keywords[1]);
                         break;
                     case TASK_TYPE_EVENT_COMMAND:
-                        new AddEventCommand(input);
+                        new AddEventCommand(keywords[1]);
                         break;
                     case DELETE_COMMAND:
                         new DeleteCommand(input);

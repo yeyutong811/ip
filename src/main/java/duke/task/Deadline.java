@@ -2,7 +2,6 @@ package duke.task;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 /**
  * Represents a Event Task. A <code>Event</code> object corresponds to
@@ -15,6 +14,8 @@ public class Deadline extends Task {
     public Deadline(String taskName, String taskTime) {
         super(taskName);
         deadline = taskTime;
+        this.taskType = "D";
+        this.setDate(LocalDate.parse(taskTime));
     }
 
     /**
@@ -24,7 +25,8 @@ public class Deadline extends Task {
      * */
     @Override
     public String getTaskType() {
-        return "D";
+
+        return this.taskType;
     }
 
     /**
@@ -43,6 +45,7 @@ public class Deadline extends Task {
      * */
     @Override
     public void printTask() {
-        System.out.format("[%s][%s] %s (by: %s)%n", this.getTaskType(), this.getStatusIcon(), this.taskName, this.deadline);
+        System.out.format("[%s][%s] %s (by: %s)%n", this.getTaskType(), this.getStatusIcon(), this.taskName,
+                this.date.format(DateTimeFormatter.ofPattern("MMM d yyyy")));
     }
 }

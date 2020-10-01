@@ -44,6 +44,15 @@ public class DukeException extends Exception {
     }
 
     /**
+     * Prints the messages to show that the date the user entered is invalid.
+     */
+    public void invalidDateError() {
+        Ui.printSeparation();
+        System.out.println("    Task date cannot be recognized! Please enter in the format YYYY-MM-DD.");
+        Ui.printSeparation();
+    }
+
+    /**
      * Selects the error message to print.
      */
     public void selectDukeException() {
@@ -51,7 +60,9 @@ public class DukeException extends Exception {
             missingToDoArgsMessage(command);
         } else if (command.equals("event") || command.equals("deadline")) {
             missingDeadlineEventArgsMessage(command);
-        } else if (!command.contains("todo") && !command.contains("deadline") && !command.contains("event")) {
+        } else if (command.equals("dateError")) {
+            invalidDateError();
+        }else if (!command.contains("todo") && !command.contains("deadline") && !command.contains("event")) {
             invalidCommandError();
         }
     }
