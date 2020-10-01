@@ -29,7 +29,6 @@ public class Storage {
                 f.createNewFile();
             } else {
                 readFile();
-                System.out.println("    File already exists.");
             }
         } catch (IOException e) {
             System.out.println("Something went wrong when creating file: " + e.getMessage());
