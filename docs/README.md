@@ -2,7 +2,12 @@
 
 Duke is a task scheduler that allows you to manage 3 types of tasks: todos, deadlines or events. 
 
-## Quick Start
+##Content Page
+1. Quick Start  
+2. Features  
+3. Command Summary
+
+## 1 Quick Start
 1. Ensure you have Java 11 or above installed on your computer.  
 2. Download the latest `ip.jar` file.  
 3. Copy the file to your desired home folder.  
@@ -11,12 +16,12 @@ Duke is a task scheduler that allows you to manage 3 types of tasks: todos, dead
 6. Enter `help` to view available user commands.
 7. Refer to the guide below for details of each command. 
 
-## Features 
+## 2 Features 
 
-### 1. Help Feature
+### 2.1 Help Feature
 This feature shows the available user commands.
 
-### Usage
+### Usage:
 
 ### `help` - View list of user commands
 
@@ -43,10 +48,10 @@ Expected outcome:
     ____________________________________________________________
 ```    
 
-### 2. List Feature
+### 2.2 List Feature
 This feature shows the user the list of existing tasks.
 
-### Usage
+### Usage:
 
 ### `list` - View list of tasks
 
@@ -60,15 +65,15 @@ Expected outcome:
 ```
     ____________________________________________________________ 
     1.[T][X] borrow book   
-    2.[D][X] return book (by: 3rd Aug)   
-    3.[E][X] read book (at: 9am)   
+    2.[D][X] return book (by: Aug 11 2000)   
+    3.[E][X] read book (at: Aug 3 2000)   
     ____________________________________________________________    
 ```
 
-### 3. Add Task Feature 
+### 2.3 Add Task Feature 
 This feature allows the user to add 3 different types of tasks to the list.
 
-### Usage
+### Usage:
 
 ### `todo` - Add todo task
 
@@ -93,14 +98,14 @@ Add a deadline task in the task list.
 
 Example of usage: 
 
-`deadline return book /by 3rd Aug`
+`deadline return book /by 2000-08-11`
 
 Expected outcome:
 
 ```
     ____________________________________________________________   
     Got it. I've added this task:  
-    [D][X] return book (by: 3rd Aug)  
+    [D][X] return book (by: Aug 11 2000)  
     Now you have 2 tasks in the list.  
     ____________________________________________________________
 ```
@@ -111,22 +116,22 @@ Add an event task in the task list.
 
 Example of usage: 
 
-`event read book /at 9am`
+`event read book /at 2000-08-03`
 
 Expected outcome:
 
 ```
     ____________________________________________________________   
     Got it. I've added this task:  
-    [E][X] read book (at: 9am)  
+    [E][X] read book (at: Aug 3 2000)  
     Now you have 3 tasks in the list.  
     ____________________________________________________________
 ```
 
-### 4. Delete Task Feature 
+### 2.4 Delete Task Feature 
 This feature allows the user to delete a task from the task list.
 
-### Usage
+### Usage:
 
 ### `delete` - Delete task
 
@@ -141,16 +146,16 @@ Expected outcome:
     ____________________________________________________________   
     If the task with the index exists:  
     Noted. I'll removed this task:   
-    [E][X] read book (at: 9am)  
+    [E][X] read book (at: Aug 3 2000)  
     Task removed successfully!  
     Now you have 2 tasks in the list.  
     ____________________________________________________________   
 ```
 
-### 5. Complete Task Feature 
+### 2.5 Complete Task Feature 
 This feature allows the user to mark a task in the task list as done.
 
-### Usage
+### Usage:
 
 ### `done` - Mark the task as done
 
@@ -168,10 +173,10 @@ Expected outcome:
     ____________________________________________________________   
 ```
 
-### 6. Find Task Feature 
+### 2.6 Find Task Feature 
 This feature allows the user find tasks using a keyword.
 
-### Usage
+### Usage:
 
 ### `find` - Find tasks by keyword
 
@@ -189,12 +194,12 @@ Expected outcome:
     ____________________________________________________________    
 ```
 
-### 7. Exit Feature 
+### 2.7 Exit Feature 
 This feature allows the user find tasks using a keyword.
 
-### Usage
+### Usage: 
 
-### `bye` - Exit the program
+###`bye` - Exit the program
 
 Print exit message and end the program.
 
@@ -209,15 +214,15 @@ Expected outcome:
     ____________________________________________________________    
 ```
 
-## Command Summary
+## 3 Command Summary
 
 Command | Function | Format
 ------------ | ------------- | -------------
 help | View list of commands | `help`
 list | View list of tasks | `list`
 todo | Add todo task | `todo` **Task Name**
-deadline | Add deadline task | `deadline` **Task Name /by Task Time**
-event | Add event task | `event` **Task Name /at Task Time**
+deadline | Add deadline task | `deadline` **Task Name /by YYYY_MM_DD**
+event | Add event task | `event` **Task Name /at YYYY_MM_DD**
 delete | Delete task | `delete` **Task Index**
 done | Mark task as done | `done` **Task Index**
 find | Find tasks by keyword |  `find` **Keyword**

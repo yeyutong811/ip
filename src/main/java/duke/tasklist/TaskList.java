@@ -9,6 +9,7 @@ import duke.task.ToDo;
 import duke.ui.Ui;
 
 import java.io.IOException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,7 @@ import java.util.stream.Collectors;
  * Represents the list of existing tasks.
  */
 public class TaskList {
-    private static final int LENGTH_OF_TYPE_DEADLINE = 8;
     private static final int LENGTH_OF_TYPE_TO_DO = 4;
-    private static final int LENGTH_OF_TYPE_EVENT = 5;
     private static final int DATA_TASK_STATUS_INDEX = 1;
     private static final int DATA_TASK_NAME_INDEX = 2;
     private static final int DATA_TASK_TIME_INDEX = 3;
@@ -62,17 +61,14 @@ public class TaskList {
      */
     public static void addToDo(String line) throws DukeException {
         try {
+
             String taskName = line.substring(LENGTH_OF_TYPE_TO_DO + 1);
             ToDo t = new ToDo(taskName);
+
             addTaskToList(t);
         } catch (StringIndexOutOfBoundsException | IOException e) {
             throwException("todo");
-            //Ui.printMissingTaskDescriptionMessage(" todo");
         }
-    }
-
-    public static void throwException(String command) throws DukeException {
-        throw new DukeException(command);
     }
 
     /**
@@ -82,18 +78,16 @@ public class TaskList {
      */
     public static void addDeadline(String line) throws DukeException {
         try {
-            int endOfTaskNameIndex = line.indexOf('/', LENGTH_OF_TYPE_DEADLINE) - 1;
-            String taskName = line.substring(LENGTH_OF_TYPE_DEADLINE +1, endOfTaskNameIndex);
 
-            int startOfTaskTimeIndex = line.indexOf("/by") + 4;
-            String taskTime = line.substring(startOfTaskTimeIndex);
+            String[] taskContent = line.split("/by ", 2);
 
-            Deadline d = new Deadline(taskName, taskTime);
+            Deadline d = new Deadline(taskContent[0], taskContent[1]);
 
             addTaskToList(d);
-        } catch (StringIndexOutOfBoundsException | IOException e) {
+        } catch (StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException | IOException e) {
             throwException("deadline");
-            //Ui.printMissingTaskDescriptionMessage(" deadline");
+        } catch (DateTimeParseException e) {
+            throwException("dateError");
         }
     }
 
@@ -104,19 +98,26 @@ public class TaskList {
      */
     public static void addEvent(String line) throws DukeException {
         try {
-            int endOfTaskNameIndex = line.indexOf('/', LENGTH_OF_TYPE_EVENT) - 1;
-            String taskName = line.substring(LENGTH_OF_TYPE_EVENT +1, endOfTaskNameIndex);
+            String[] taskContent = line.split("/at ", 2);
 
-            int startOfTaskTimeIndex = line.indexOf("/at") + 4;
-            String taskTime = line.substring(startOfTaskTimeIndex);
-
-            Event e = new Event(taskName, taskTime);
+            Event e = new Event(taskContent[0], taskContent[1]);
 
             addTaskToList(e);
-        } catch (StringIndexOutOfBoundsException | IOException e) {
+        } catch (StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException | IOException e) {
             throwException("event");
-            //Ui.printMissingTaskDescriptionMessage("n event");
+        } catch (DateTimeParseException e) {
+            throwException("dateError");
         }
+    }
+
+    /**
+     * Throws DukeException.
+     *
+     * @param command command word to decide which message under DukeException is to be called.
+     * @throws DukeException at all times.
+     */
+    public static void throwException(String command) throws DukeException {
+        throw new DukeException(command);
     }
 
     /**

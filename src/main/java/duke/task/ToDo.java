@@ -7,7 +7,9 @@ package duke.task;
 public class ToDo extends Task {
 
     public ToDo(String taskName) {
+
         super(taskName);
+        this.taskType = "T";
     }
 
     /**
@@ -17,7 +19,7 @@ public class ToDo extends Task {
      * */
     @Override
     public String getTaskType() {
-        return "T";
+        return this.taskType;
     }
 
     /**

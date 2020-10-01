@@ -1,5 +1,8 @@
 package duke.task;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 /**
  * Represents a Event Task. A <code>Event</code> object corresponds to
  * 3 string variables e.g., <code>E, read book, 9-11am</code>
@@ -8,10 +11,12 @@ public class Event extends Task {
 
     protected String time;
 
+
     public Event(String taskName, String taskTime) {
         super(taskName);
         time = taskTime;
         this.taskType = "E";
+        this.setDate(LocalDate.parse(taskTime));
     }
 
     /**
@@ -21,7 +26,7 @@ public class Event extends Task {
      * */
     @Override
     public String getTaskType() {
-        return "E";
+        return this.taskType;
     }
 
     /**
@@ -39,6 +44,7 @@ public class Event extends Task {
      * */
     @Override
     public void printTask() {
-        System.out.format("[%s][%s] %s (at: %s)%n", this.getTaskType(), this.getStatusIcon(), this.taskName, this.time);
+        System.out.format("[%s][%s] %s (at: %s)%n", this.getTaskType(), this.getStatusIcon(), this.taskName,
+                this.date.format(DateTimeFormatter.ofPattern("MMM d yyyy")));
     }
 }
